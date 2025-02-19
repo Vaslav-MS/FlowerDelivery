@@ -2,27 +2,28 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h2>Каталог цветов</h2>
-    
+    <h2 class="text-center">Каталог цветов</h2>
+
     <div class="row">
         {% for product in products %}
-        <div class="col-md-4">
-            <div class="card mb-4">
+        <div class="col-6 col-md-3">  <!-- 2 товара в ряд на мобильных, 4 на ПК -->
+            <div class="card mb-4 shadow-sm">
                 {% if product.image %}
                 <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                 {% else %}
                 <img src="https://via.placeholder.com/300" class="card-img-top" alt="Нет изображения">
                 {% endif %}
-                <div class="card-body">
+                <div class="card-body text-center">
                     <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.price }} ₽</p>
-                    <a href="{% url 'catalog:detail' product.id %}" class="btn btn-primary">Подробнее</a>
+                    <p class="card-text"><strong>{{ product.price }} ₽</strong></p>
+                    <button class="btn btn-outline-primary w-100">Добавить в корзину</button>  <!-- Заглушка -->
                 </div>
             </div>
         </div>
         {% empty %}
-        <p>Товары пока не добавлены.</p>
+        <p class="text-center">Товары пока не добавлены.</p>
         {% endfor %}
     </div>
 </div>
 {% endblock %}
+
