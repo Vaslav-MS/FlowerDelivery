@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h1>Добро пожаловать в Flower Delivery</h1>
+    <p class="lead">Мы доставляем самые свежие цветы прямо к вашему порогу.</p>
+    <a href="{% url 'catalog:list' %}" class="btn btn-primary">Перейти в каталог</a>
+</div>
+{% endblock %}

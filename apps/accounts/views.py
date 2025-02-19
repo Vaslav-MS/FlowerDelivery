@@ -8,13 +8,12 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('catalog:list')  # редирект на страницу каталога (пример)
+            return redirect('catalog:list')
     else:
         form = RegistrationForm()
     return render(request, 'accounts/register.html', {'form': form})
 
 def user_login(request):
-    # Реализуйте логику аутентификации
     return render(request, 'accounts/login.html')
 
 def user_logout(request):
