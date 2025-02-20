@@ -1,7 +1,10 @@
 from django.urls import path
+from .views import checkout, order_history
+
+app_name = "orders"
 
 urlpatterns = [
-    # Здесь можно добавить URL-шаблоны позже.
-    # Например, так:
-    # path('', views.index, name='index'),
+    path("checkout/", checkout, name="checkout"),
+    path("history/", order_history, name="history"),
 ]
+

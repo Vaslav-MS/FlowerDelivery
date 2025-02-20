@@ -6,7 +6,7 @@
 
     <div class="row">
         {% for product in products %}
-        <div class="col-6 col-md-3">  <!-- 2 товара в ряд на мобильных, 4 на ПК -->
+        <div class="col-6 col-md-3">
             <div class="card mb-4 shadow-sm">
                 {% if product.image %}
                 <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
@@ -16,7 +16,10 @@
                 <div class="card-body text-center">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text"><strong>{{ product.price }} ₽</strong></p>
-                    <button class="btn btn-outline-primary w-100">Добавить в корзину</button>  <!-- Заглушка -->
+                    <button class="btn btn-outline-primary w-100"
+                            onclick="window.location.href='{% url 'cart:add' product.id %}'">
+                        Добавить в корзину
+                    </button>
                 </div>
             </div>
         </div>
