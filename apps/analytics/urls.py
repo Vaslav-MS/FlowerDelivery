@@ -1,7 +1,9 @@
 from django.urls import path
+from .views import analytics_dashboard
+
+app_name = "analytics"
 
 urlpatterns = [
-    # Здесь можно добавить URL-шаблоны позже.
-    # Например, так:
-    # path('', views.index, name='index'),
+    path("", analytics_dashboard, name="dashboard"),
 ]
+

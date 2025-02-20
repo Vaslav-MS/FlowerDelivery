@@ -10,7 +10,7 @@ urlpatterns = [
     path('cart/', include('apps.cart.urls')),
     path('orders/', include('apps.orders.urls')),
     path('reviews/', include('apps.reviews.urls')),
-    path('analytics/', include('apps.analytics.urls')),
+    path("analytics/", include("apps.analytics.urls", namespace="analytics")),
 ]
 
 from django.conf import settings

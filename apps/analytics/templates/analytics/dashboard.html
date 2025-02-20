@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-3">Ежедневная аналитика</h2>
+
+    {% if analytics_data %}
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Заказов</th>
+                <th>Доход (₽)</th>
+                <th>Средний чек (₽)</th>
+                <th>Проданных единиц</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for day in analytics_data %}
+            <tr>
+                <td>{{ day.date }}</td>
+                <td>{{ day.order_count }}</td>
+                <td>{{ day.total_revenue }}</td>
+                <td>{{ day.average_order_value }}</td>
+                <td>{{ day.sold_units }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>Данных пока нет.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
