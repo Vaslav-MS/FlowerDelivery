@@ -5,6 +5,8 @@ from aiogram.filters import Command
 from asgiref.sync import sync_to_async
 
 from apps.orders.models import Order
+from apps.analytics.models import DailyAnalytics
+from config import ADMIN_CHAT_ID
 
 router = Router()
 logger = logging.getLogger(__name__)
@@ -19,14 +21,15 @@ async def cmd_help(message: Message):
         'Доступные команды:\n'
         '/start - Запуск бота\n'
         '/help - Помощь\n'
-        '/status &lt;order_id&gt; &lt;new_status&gt; - Изменить статус заказа (например, /status 123 delivered)'
+        '/status &lt;order_id&gt; &lt;new_status&gt; - Изменить статус заказа (например, /status 123 delivered)\n'
+        '/analytics - Показать аналитические данные (доступно только администратору)'
     )
 
 @router.message(Command('status'))
 async def cmd_status(message: Message):
     args = message.text.split()[1:]
     if len(args) < 2:
-        await message.answer('Использование: /status <order_id> <new_status>')
+        await message.answer('Использование: /status &lt;order_id&gt; &lt;new_status&gt;')
         return
 
     try:
@@ -47,9 +50,29 @@ async def cmd_status(message: Message):
         order.status = new_status
         await sync_to_async(order.save)()
         await message.answer(f'Статус заказа {order_id} изменен на {new_status}.')
-
     except ValueError:
         await message.answer('Неверный формат order_id. Укажите корректное число.')
+
+@router.message(Command('analytics'))
+async def cmd_analytics(message: Message):
+    if str(message.from_user.id) != ADMIN_CHAT_ID:
+        await message.answer('Нет доступа.')
+        return
+
+    analytics_qs = DailyAnalytics.objects.order_by('-date')[:7]
+    analytics_data = await sync_to_async(list)(analytics_qs)
+    if not analytics_data:
+        await message.answer('Аналитических данных пока нет.')
+        return
+
+    text = 'Аналитика за последние 7 дней:\n'
+    for day in analytics_data:
+        text += (
+            f'Дата: {day.date} | Заказов: {day.order_count} | '
+            f'Доход: {day.total_revenue} ₽ | Средний чек: {day.average_order_value} ₽ | '
+            f'Продано: {day.sold_units}\n'
+        )
+    await message.answer(text)
 
 @router.message()
 async def cmd_echo(message: Message):
