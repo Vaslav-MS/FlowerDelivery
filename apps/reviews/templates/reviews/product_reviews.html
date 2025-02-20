@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Отзывы о товаре {{ product.name }}</h2>
+
+    {% if reviews %}
+        <ul class="list-group mt-3">
+            {% for review in reviews %}
+                <li class="list-group-item">
+                    <strong>{{ review.user }}</strong> ({{ review.created_at|date:"d.m.Y H:i" }})
+                    <span class="badge bg-primary">{{ review.rating }}★</span>
+                    <p class="mt-2">{{ review.text }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="text-center mt-3">Пока нет отзывов. Будьте первым!</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <h3 class="mt-4">Оставить отзыв</h3>
+        <form method="post" action="{% url 'reviews:add_review' product.id %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Добавить отзыв</button>
+        </form>
+    {% else %}
+        <p class="text-center mt-3">Войдите, чтобы оставить отзыв.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

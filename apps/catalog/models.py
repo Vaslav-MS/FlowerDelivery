@@ -1,5 +1,8 @@
 import os
+import os
 from django.db import models
+from django.db.models import Avg
+from django.apps import apps  # Импортируем apps вместо Review напрямую
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="Категория")
@@ -19,6 +22,12 @@ class Product(models.Model):
     image = models.ImageField(upload_to="products/", blank=True, null=True, verbose_name="Изображение")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
 
+    def average_rating(self):
+        """Вычисляет средний рейтинг товара по отзывам"""
+        Review = apps.get_model("reviews", "Review")  # Получаем модель Review через apps
+        avg_rating = Review.objects.filter(product=self).aggregate(avg_rating=Avg("rating"))["avg_rating"]
+        return round(avg_rating, 1) if avg_rating else None
+
     def save(self, *args, **kwargs):
         """Удаляет старое изображение при загрузке нового"""
         try:
@@ -37,3 +46,4 @@ class Product(models.Model):
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+

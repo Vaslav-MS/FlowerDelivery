@@ -6,17 +6,29 @@
 
     <div class="row">
         {% for product in products %}
-        <div class="col-6 col-md-3">
-            <div class="card mb-4 shadow-sm">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card shadow-sm">
                 {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                 {% else %}
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="Нет изображения">
+                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="Нет изображения">
                 {% endif %}
                 <div class="card-body text-center">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text"><strong>{{ product.price }} ₽</strong></p>
-                    <button class="btn btn-outline-primary w-100"
+
+                    <!-- Блок рейтинга -->
+                    <a href="{% url 'reviews:product_reviews' product.id %}" class="btn btn-outline-secondary d-block py-2">
+                        Рейтинг:
+                        {% if product.average_rating %}
+                            {{ product.average_rating }} ⭐
+                        {% else %}
+                            —
+                        {% endif %}
+                    </a>
+
+                    <!-- Кнопка "Добавить в корзину" -->
+                    <button class="btn btn-outline-primary w-100 mt-2"
                             onclick="window.location.href='{% url 'cart:add' product.id %}'">
                         Добавить в корзину
                     </button>
@@ -24,7 +36,7 @@
             </div>
         </div>
         {% empty %}
-        <p class="text-center">Товары пока не добавлены.</p>
+            <p class="text-center">Товары пока не добавлены.</p>
         {% endfor %}
     </div>
 </div>

@@ -27,7 +27,7 @@ class Order(models.Model):
         verbose_name_plural = "Заказы"
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE, verbose_name="Заказ")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items", verbose_name="Заказ", null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Товар")
     quantity = models.PositiveIntegerField(verbose_name="Количество")
 
