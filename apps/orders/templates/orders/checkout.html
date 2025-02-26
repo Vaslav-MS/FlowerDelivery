@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Оформление заказа</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_delivery_date" class="form-label">Дата доставки</label>
+            {{ form.delivery_date }}
+        </div>
+        <div class="mb-3">
+            <label for="id_delivery_time" class="form-label">Время доставки</label>
+            {{ form.delivery_time }}
+        </div>
+        <div class="mb-3">
+            <label for="id_delivery_address" class="form-label">Адрес доставки</label>
+            {{ form.delivery_address }}
+        </div>
+        <button type="submit" class="btn btn-primary">Оформить заказ</button>
+    </form>
+</div>
+{% endblock %}
+
