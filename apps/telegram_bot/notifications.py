@@ -29,3 +29,24 @@ async def send_order_notification(order):
             await bot.send_message(chat_id=ADMIN_CHAT_ID, text=message)
     except Exception as e:
         logger.exception(f'Ошибка отправки уведомления: {e}')
+
+async def send_status_change_notification(order):
+    token = TELEGRAM_BOT_TOKEN
+    if not token:
+        logger.error('TELEGRAM_BOT_TOKEN не найден.')
+        return
+    if not ADMIN_CHAT_ID:
+        logger.error('ADMIN_CHAT_ID не задан.')
+        return
+
+    message = (
+        f'<b>Смена статуса заказа!</b>\n'
+        f'ID заказа: {order.id}\n'
+        f'Пользователь: {order.user.username}\n'
+        f'Новый статус: {order.status}'
+    )
+    try:
+        async with Bot(token=token, default=DefaultBotProperties(parse_mode='HTML')) as bot:
+            await bot.send_message(chat_id=ADMIN_CHAT_ID, text=message)
+    except Exception as e:
+        logger.exception(f'Ошибка отправки уведомления о смене статуса: {e}')
