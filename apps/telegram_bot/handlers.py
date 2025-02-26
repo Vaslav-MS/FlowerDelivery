@@ -6,6 +6,7 @@ from asgiref.sync import sync_to_async
 
 from apps.orders.models import Order
 from apps.analytics.models import DailyAnalytics
+from apps.telegram_bot.notifications import send_status_change_notification
 from config import ADMIN_CHAT_ID
 
 router = Router()
@@ -49,6 +50,8 @@ async def cmd_status(message: Message):
 
         order.status = new_status
         await sync_to_async(order.save)()
+        # Отправляем уведомление о смене статуса
+        await send_status_change_notification(order)
         await message.answer(f'Статус заказа {order_id} изменен на {new_status}.')
     except ValueError:
         await message.answer('Неверный формат order_id. Укажите корректное число.')
@@ -80,4 +83,3 @@ async def cmd_echo(message: Message):
 
 def register_handlers(dp):
     dp.include_router(router)
-
